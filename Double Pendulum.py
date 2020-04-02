@@ -35,7 +35,6 @@ def solve(m1, m2 ,g, l1, l2, y0):
         r.integrate(r.t + dt)
         idx += 1
     return y
-
 # This things calculate the trajectory of the pendulum
 y = solve(m1, m2,g, l1, l2, y0)
 theta_1, theta_2 = y[:, 0], y[:, 2]
@@ -58,29 +57,3 @@ plt.plot(x2,y2)
 plt.show()
 
 
-'''
-fig, ax = plt.subplots()
-ax.set_xlim(-2, 2) # This sets the x axis limit
-ax.set_ylim(-2, 0.5) # This sets the y axis limit
-line, = ax.plot(x2[0], y2[0])
-
-
-
-anx = []
-any = []
-def animation(i):
-    anx.append(x2[i])
-    any.append(y2[i])
-
-    line.set_xdata(anx)
-    line.set_ydata(any)
-    return line,
-
-a = []
-for x in range(len(x1)):
-    a.append(x)
-
-ax.grid()
-animation = FuncAnimation(fig, animation, frames=a, interval=10)
-plt.show()
-'''
