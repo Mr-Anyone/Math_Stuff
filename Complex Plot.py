@@ -4,12 +4,17 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d.axes3d import Axes3D
 import cmath
 
+'''
+To make a color map plot you would need to use the meshgrid fucntion and shit
+
+'''
+
 inputs = []
 x1 = []  # Real Value input
 y1 = []  # Real Value Output
-add = np.linspace(-10,10, 10)
+add = np.linspace(-10, 10, 10)
 
-# This would make complex an list of complex numbers
+# This would make complex an list of complex numbers and ploting becomes simple
 for x in add:
     for i in add:
         inputs.append(complex(x,i))
@@ -23,18 +28,19 @@ y_array = np.array(y1)
 X1,Y1 = np.meshgrid(x_array,y_array)# This is a must
 
 # The complex function
-Z = np.sin(X1+Y1) # This is the input function
-
+Z = (X1+Y1)**2 + 1 # This is the input function
+R = Z.imag
 # This would be plotting the thing
-fig, axes = plt.subplots(figsize=(5,5), subplot_kw={'projection':'3d'})# Defineing the subplots
+fig, axes = plt.subplots(figsize=(7,5), subplot_kw={'projection':'3d'})# Defineing the subplots
 
+print(Z.imag)
 norm = mpl.colors.Normalize(-abs(Z.imag).max(), abs(Z.imag).max())# This would setup the colour Normalize
-p = axes.plot_surface(X1,Y1.imag,Z.real,antialiased=False, norm=norm, cmap=mpl.cm.Reds) #
+p = axes.plot_surface(X1,Y1,Z.real,antialiased=False, norm=norm, cmap=mpl.cm.jet) # This define how the things will be setup
 
-axes.set_title("Complex Plot of X^2 + 1")
+axes.set_title("Complex Plot of X^2 +1 ")
 axes.set_xlabel("Real Value Input ")
-axes.set_ylabel("Imagery Value Input")
-axes.set_zlabel("Real Value Output ")
+axes.set_ylabel("Real Value Output")
+axes.set_zlabel("Complex Value Input")
 
 cb = fig.colorbar(p, ax=axes)
 cb.set_label("Imagery Value Output")
