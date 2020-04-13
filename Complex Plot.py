@@ -1,73 +1,31 @@
-import numpy as np
-import matplotlib as mpl
+#Complex Sinus function  with coloring based to imaginary part
+# Based on this comment http://stackoverflow.com/a/6543777
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d.axes3d import Axes3D
-import cmath
+import numpy as np
 
-'''
-To make a color map plot you would need to use the meshgrid fucntion and shit
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+X = np.arange(-2*3.14, 2*3.14, 0.1)
+Y = np.arange(-2, 2, 0.1)
+X, Y = np.meshgrid(X, Y)
+R=np.sin(X + 1j*Y)
+Z=R.real
+T=R.imag
+N = np.abs(T/T.max())  # normalize 0..1
+plt.title(' $\mathrm{f(z)=sin(z)}$')
+plt.xlabel(' $\mathrm{Re(z)}$')
+plt.ylabel(' $\mathrm{Im(z)}$')
+surf = ax.plot_surface(
+    X, Y, Z, rstride=1, cstride=1,
+    facecolors=cm.jet(N),
+    linewidth=0, antialiased=True, shade=False)
+# Colorbar see http://stackoverflow.com/a/6601210
+m = cm.ScalarMappable(cmap=cm.jet, norm=surf.norm)
+m.set_array(T)
+p=plt.colorbar(m)
+p.set_label(' $\mathrm{Im(f(z))}$')
 
-'''
-
-inputs = []
-x1 = []  # Real Value input
-y1 = []  # Real Value Output
-add = np.linspace(-10, 10, 10)
-
-# This would make complex an list of complex numbers and ploting becomes simple
-for x in add:
-    for i in add:
-        inputs.append(complex(x,i))
-
-for x in inputs:
-    x1.append(x.real)
-    y1.append(x.imag *1j)
-
-x_array = np.array(x1)
-y_array = np.array(y1)
-X1,Y1 = np.meshgrid(x_array,y_array)# This is a must
-
-# The complex function
-Z = (X1+Y1)**2 + 1 # This is the input function
-R = Z.imag
-# This would be plotting the thing
-fig, axes = plt.subplots(figsize=(7,5), subplot_kw={'projection':'3d'})# Defineing the subplots
-
-print(Z.imag)
-norm = mpl.colors.Normalize(-abs(Z.imag).max(), abs(Z.imag).max())# This would setup the colour Normalize
-p = axes.plot_surface(X1,Y1,Z.real,antialiased=False, norm=norm, cmap=mpl.cm.jet) # This define how the things will be setup
-
-axes.set_title("Complex Plot of X^2 +1 ")
-axes.set_xlabel("Real Value Input ")
-axes.set_ylabel("Real Value Output")
-axes.set_zlabel("Complex Value Input")
-
-cb = fig.colorbar(p, ax=axes)
-cb.set_label("Imagery Value Output")
-
-
-plt.show()
-'''
-import time
-
-a = time.time()
-x = np.linspace(0,100, 1000)
-y = np.sqrt(x)
-z = np.sqrt(x)
-
-
-X,Y = np.meshgrid(x,y) # Making an meshgrid
-Z = np.sqrt(Y) # Making another 
-b = time.time()
-
-fig, ax = plt.subplots(figsize=(6,5))
-
-norm = mpl.colors.Normalize(-abs(Z).max(), abs(Z).max())
-p = ax.pcolor(X,Y,Z,norm=norm,cmap=mpl.cm.bwr)
-ax.axis('tight')
-ax.set_xlabel("X")
-ax.set_ylabel("Y")
-cb = fig.colorbar(p, ax=ax)
-cb.set_label("Z")
-plt.show()
-'''
+fig.set_size_inches(14,7) #http://stackoverflow.com/questions/332289/how-do-you-change-the-size-of-figures-drawn-with-matplotlib
+plt.show() # if you run it as a python script
